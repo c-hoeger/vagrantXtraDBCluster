@@ -1,0 +1,2 @@
+name              "xtradbcluster"
+depends           "apt"

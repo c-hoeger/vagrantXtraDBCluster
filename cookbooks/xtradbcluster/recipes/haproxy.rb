@@ -1,6 +1,11 @@
-  package "haproxy" do
-    action :install
-  end
+apt_repository 'backports' do
+  uri        'http://http.debian.net/debian'
+  components ['wheezy-backports', 'main' ]
+end
+
+package "haproxy" do
+  action :install
+end
 
 directory "/etc/haproxy" do
   owner "root"
@@ -30,3 +35,6 @@ service "haproxy" do
   supports :status => true, :restart => true, :reload => true
   action [ :enable, :start ]
 end
+
+
+include_recipe 'apt'
