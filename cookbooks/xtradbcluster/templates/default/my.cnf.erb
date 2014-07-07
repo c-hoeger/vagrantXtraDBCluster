@@ -44,7 +44,7 @@ skip-external-locking
 #
 # Instead of skip-networking the default is now to listen only on
 # localhost which is more compatible and is not less secure.
-#bind-address           = 127.0.0.1
+bind-address           = <%= node['xtradbcluster']['bind_address'] %>
 #
 # * Fine Tuning
 #
@@ -121,15 +121,10 @@ wsrep_sst_receive_address = <%= node['xtradbcluster']['recv_ip'] %>
 
 wsrep_node_name=<%= node['xtradbcluster']['name'] %>
 
+wsrep_sst_auth=<%= node['xtradbcluster']['sst_auth'] %>
 
 innodb_locks_unsafe_for_binlog=1
 innodb_autoinc_lock_mode=2
-
-
-
-
-
-
 
 
 [mysqldump]

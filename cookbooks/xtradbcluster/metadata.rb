@@ -1,4 +1,7 @@
 name    "xtradbcluster"
 
 depends "apt"
-# depends "mysql"
+depends "hostname"
+depends "mysql"
+depends "database"
+depends "build-essential"

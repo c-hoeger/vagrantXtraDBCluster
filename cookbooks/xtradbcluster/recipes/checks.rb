@@ -1,13 +1,3 @@
-# template "/etc/apt/sources.list.d/percona.list" do
-#   source "percona.list.erb"
-#   owner "root"
-#   group "root"
-#   mode 0755
-# end
-#
-# execute "apt update" do
-#   command "apt-get update"
-# end
 
 package "apache2" do
   action :install

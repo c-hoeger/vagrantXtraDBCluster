@@ -1,3 +1,4 @@
+
 apt_repository 'backports' do
   uri        'http://http.debian.net/debian'
   components ['wheezy-backports', 'main' ]
@@ -38,3 +39,4 @@ end
 
 
 include_recipe 'apt'
+include_recipe 'hostname'
