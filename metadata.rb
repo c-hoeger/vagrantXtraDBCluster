@@ -1,1 +1,1 @@
-name              "vagrantXtraDBCluster"
+name "vagrantXtraDBCluster"

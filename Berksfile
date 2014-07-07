@@ -4,3 +4,4 @@ metadata
 
 cookbook 'xtradbcluster', path: "cookbooks/xtradbcluster"
 cookbook 'apt'
+# cookbook 'mysql'
