@@ -19,4 +19,11 @@ if node[:xtradbcluster][:cluster_ip]
     privileges ['reload', 'lock tables', 'replication slave', 'replication client']
     action :grant
   end
+  mysql_database_user repuser do
+    connection mysql_connection_info
+    host 'localhost'
+    password reppw
+    privileges ['reload', 'lock tables', 'replication slave', 'replication client']
+    action :grant
+  end
 end
