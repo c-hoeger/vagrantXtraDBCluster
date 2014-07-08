@@ -132,7 +132,7 @@ Vagrant.configure("2") do |config|
 
       chef.json.merge!( :xtradbcluster => { :cluster_ip => node1ip, :name => "node3", :recv_ip => node3ip, :bind_address => node3ip,
                                             :sst_auth => sstauth, :repuser => repuser, :reppw => reppw },
-                        :set_fqdn => "node2.#{domain}",
+                        :set_fqdn => "node3.#{domain}",
                         :hostname_cookbook => { :hostsfile_ip => node3ip })
     end
   end
