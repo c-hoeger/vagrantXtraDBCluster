@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
 
   config.berkshelf.enabled = true
 
-  if proxyurl
+  if defined? proxyurl
     config.proxy.http      = proxyurl
     config.proxy.https     = proxyurl
     config.proxy.no_proxy  = "localhost"
@@ -34,8 +34,10 @@ Vagrant.configure("2") do |config|
     config.yum_proxy.http  = proxyurl
   end
 
-  if repuser && reppw
+  if defined? repuser && defined? reppw
     sstauth  = "#{repuser}:#{reppw}"
+  else
+    sstauth = ""
   end
 
   config.vm.define :haproxy do |vm_config|
