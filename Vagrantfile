@@ -9,6 +9,7 @@ Vagrant.configure("2") do |config|
   # proxyurl = "http://" + IPSocket.getaddress(Socket.gethostname) + ":8123"
   # name of the image
   boxname  = "opscode-debian-7.4-chef"
+  # boxurl   = "http://url-to-image"
   # domain to use
   domain   = "example.com"
   # username password for replication
@@ -42,7 +43,9 @@ Vagrant.configure("2") do |config|
 
   config.vm.define :haproxy do |vm_config|
     vm_config.vm.box = boxname
-    #vm_config.vm.box_url = "https://s3-eu-west-1.amazonaws.com/rosstimson-vagrant-boxes/debian-squeeze-64-rvm.box"
+    if defined? boxurl
+      vm_config.vm.box_url = boxurl
+    end
 
     vm_config.vm.network "private_network", ip: haproxip
     # vm_config.vm.network "forwarded_port", guest: 22, host: 2208
@@ -67,7 +70,9 @@ Vagrant.configure("2") do |config|
 
   config.vm.define :node1 do |vm_config|
     vm_config.vm.box = boxname
-    #vm_config.vm.box_url = "https://s3-eu-west-1.amazonaws.com/rosstimson-vagrant-boxes/debian-squeeze-64-rvm.box"
+    if defined? boxurl
+      vm_config.vm.box_url = boxurl
+    end
 
     vm_config.vm.network "private_network", ip: node1ip
     # vm_config.vm.network "forwarded_port", guest: 22, host: 2205
@@ -94,7 +99,9 @@ Vagrant.configure("2") do |config|
 
   config.vm.define :node2 do |vm_config|
     vm_config.vm.box = boxname
-    #vm_config.vm.box_url = "https://s3-eu-west-1.amazonaws.com/rosstimson-vagrant-boxes/debian-squeeze-64-rvm.box"
+    if defined? boxurl
+      vm_config.vm.box_url = boxurl
+    end
 
     vm_config.vm.network "private_network", ip: node2ip
     # vm_config.vm.network "forwarded_port", guest: 22, host: 2206
@@ -120,7 +127,9 @@ Vagrant.configure("2") do |config|
 
   config.vm.define :node3 do |vm_config|
     vm_config.vm.box = boxname
-    #vm_config.vm.box_url = "https://s3-eu-west-1.amazonaws.com/rosstimson-vagrant-boxes/debian-squeeze-64-rvm.box"
+    if defined? boxurl
+      vm_config.vm.box_url = boxurl
+    end
 
     vm_config.vm.network "private_network", ip: node3ip
     # vm_config.vm.network "forwarded_port", guest: 22, host: 2207
