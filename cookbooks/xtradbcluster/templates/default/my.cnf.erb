@@ -117,7 +117,11 @@ wsrep_cluster_address=gcomm://<%= node['xtradbcluster']['cluster_ip'] %>
 wsrep_slave_threads=2
 wsrep_cluster_name=perconaVagrant
 
-wsrep_sst_method=xtrabackup
+# FIXME: actually use WHAT???
+# wsrep_sst_method=xtrabackup-v2
+# wsrep_sst_method=xtrabackup
+# none of the above methods work, using rsync for now
+wsrep_sst_method=rsync
 wsrep_sst_receive_address = <%= node['xtradbcluster']['recv_ip'] %>
 
 wsrep_node_name=<%= node['xtradbcluster']['name'] %>
