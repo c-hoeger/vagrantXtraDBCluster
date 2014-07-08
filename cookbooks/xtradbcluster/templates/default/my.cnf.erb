@@ -62,7 +62,8 @@ myisam-recover         = BACKUP
 # * Query Cache Configuration
 #
 query_cache_limit       = 1M
-query_cache_size        = 16M
+query_cache_size        = 0
+query_cache_type        = 0
 #
 # * Logging and Replication
 #
@@ -105,7 +106,7 @@ max_binlog_size         = 100M
 # ssl-cert=/etc/mysql/server-cert.pem
 # ssl-key=/etc/mysql/server-key.pem
 
-
+innodb_locks_unsafe_for_binlog=1
 
 binlog_format=ROW
 
@@ -126,6 +127,10 @@ wsrep_sst_auth=<%= node['xtradbcluster']['sst_auth'] %>
 innodb_locks_unsafe_for_binlog=1
 innodb_autoinc_lock_mode=2
 
+# It is recommended to run Galera in synchronous mode, which makes it possible
+# to disable the OX builtin database replication monitor.
+# Default is semi-synchronous mode. To enable synchronous mode, use
+wsrep_causal_reads=1
 
 [mysqldump]
 quick

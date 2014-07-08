@@ -1,0 +1,19 @@
+ # default: on
+ # description: mysqlchk
+ service mysqlchk
+ {
+ # this is a config for xinetd, place it in /etc/xinetd.d/
+         disable         = no
+         flags           = REUSE
+         socket_type     = stream
+         port            = 9200
+         wait            = no
+         user            = nobody
+         server          = /usr/bin/clustercheck
+         server_args     = <%= node['xtradbcluster']['repuser'] %> <%= node['xtradbcluster']['reppw'] %>
+         log_on_failure  += USERID
+         only_from       = 0.0.0.0/0
+         per_source      = UNLIMITED
+         type            = UNLISTED
+ }
+ #

@@ -1,69 +1,49 @@
-global
-      maxconn           30000
-      log               127.0.0.1 local0 err
-      uid               200
-      gid               200
-      nbproc            1
-      chroot            /tmp
-      stats socket      /tmp/haproxy.sock user root group root mode 0777 level admin
-      daemon
+ global
+     log 127.0.0.1 local0 notice
+     user haproxy
+     group haproxy
+     # TUNING
+     # this is not recommended by the haproxy authors, but seems to improve performance for me
+     #nbproc 4
 
-defaults
-        option  dontlognull
-        option  dontlog-normal
-        option  log-separate-errors
-        option  http-server-close
-        option  abortonclose
-        option tcp-smart-accept
-        option tcp-smart-connect
-        timeout server                          10s
-        timeout client                          10s
-        timeout queue                           10s
-        timeout connect                         10s
-        timeout http-request                    10s
-        timeout http-keep-alive                 5s
+ defaults
+     log global
+     retries           3
+     maxconn           256000
+     timeout connect   60000
+     timeout client    120000
+     timeout server    120000
+     no option httpclose
+     option            dontlognull
+     option            redispatch
+     option            allbackups
 
+ listen mysql-cluster
+     bind 127.0.0.1:3306
+     mode tcp
+     balance roundrobin
+     option httpchk
+     server dav-db1 <%= node['xtradbcluster']['dbnode1_ip'] %>:3306 check port 9200 inter 12000 rise 3 fall 3
+     server dav-db2 <%= node['xtradbcluster']['dbnode2_ip'] %>:3306 check port 9200 inter 12000 rise 3 fall 3
+     server dav-db3 <%= node['xtradbcluster']['dbnode3_ip'] %>:3306 check port 9200 inter 12000 rise 3 fall 3
 
-frontend app
-        bind                    0.0.0.0:80
-        mode                    http
-        log                     global
-        option                  http-server-close
-        option  httplog
-        option                  dontlog-normal
-        monitor-uri             /monitoruri
-        maxconn                 50000
-        clitimeout              3000
+ listen mysql-failover
+     bind 127.0.0.1:3307
+     mode tcp
+     balance roundrobin
+     option httpchk
+     server dav-db1 <%= node['xtradbcluster']['dbnode1_ip'] %>:3306 check port 9200 inter 12000 rise 3 fall 3
+     server dav-db2 <%= node['xtradbcluster']['dbnode2_ip'] %>:3306 check port 9200 inter 12000 rise 3 fall 3 backup
+     server dav-db3 <%= node['xtradbcluster']['dbnode3_ip'] %>:3306 check port 9200 inter 12000 rise 3 fall 3 backup
 
-        default_backend stats
-
-
-frontend mysql_read
-        bind                    0.0.0.0:3306
-        mode                    tcp
-        option                  tcplog
-        maxconn                 20000
-        clitimeout              50000
-        default_backend         cluster_mysql_read
-
-backend cluster_mysql_read
-        mode                    tcp
-        option                  httpchk HEAD /test.php HTTP/1.0
-        balance                 roundrobin
-        contimeout              3000000
-        srvtimeout              2200000
-        server                  node1 10.0.3.10:3306 check addr 10.0.3.10 port 80 inter 5000 rise 5 fall 2 weight 150
-        server                  node2 10.0.3.20:3306 check addr 10.0.3.20 port 80 inter 5000 rise 5 fall 2 weight 150
-        server                  node3 10.0.3.30:3306 check addr 10.0.3.30 port 80 inter 5000 rise 5 fall 2 weight 150
-
-backend stats
-        log                     global
-        mode                    http
-        stats                   uri /
-        stats                   auth    admin:admin
-        stats                   realm   Haproxy\ Statistics
-        stats                   refresh 5s
-        balance                 roundrobin
-
-
-
+ #
+ # can configure a stats interface here, but if you do so,
+ # change the username / password
+ #
+ listen stats
+     bind 0.0.0.0:80
+     mode http
+     stats enable
+     stats uri /
+     stats realm Strictly\ Private
+     stats auth admin:admin

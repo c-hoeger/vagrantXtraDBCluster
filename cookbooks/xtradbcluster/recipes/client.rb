@@ -1,7 +1,7 @@
 include_recipe 'xtradbcluster::repository'
 
-package "percona-xtradb-cluster-client-5.5"
-# package "libmysqlclient-dev"
-# package "libdbd-mysql-perl"
-package "percona-toolkit"
-package "sysstat"
+%w(percona-xtradb-cluster-client-5.5 percona-toolkit sysstat xinetd).each do |pkg|
+  package pkg do
+    action :install
+  end
+end

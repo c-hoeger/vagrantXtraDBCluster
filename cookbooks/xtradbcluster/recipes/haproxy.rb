@@ -31,7 +31,6 @@ template "/etc/default/haproxy" do
   mode 0755
 end
 
-
 service "haproxy" do
   supports :status => true, :restart => true, :reload => true
   action [ :enable, :start ]
