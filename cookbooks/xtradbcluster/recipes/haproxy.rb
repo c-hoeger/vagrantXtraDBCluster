@@ -1,7 +1,9 @@
 
-apt_repository 'backports' do
-  uri        'http://http.debian.net/debian'
-  components ['wheezy-backports', 'main' ]
+if platform_family?("debian")
+  apt_repository 'backports' do
+    uri        'http://http.debian.net/debian'
+    components ['wheezy-backports', 'main' ]
+  end
 end
 
 package "haproxy" do

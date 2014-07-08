@@ -4,6 +4,7 @@ metadata
 
 cookbook 'xtradbcluster', path: "cookbooks/xtradbcluster"
 cookbook 'apt'
+cookbook 'yum-epel'
 cookbook 'hostname'
 cookbook 'mysql'
 cookbook 'database'

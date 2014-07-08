@@ -11,6 +11,14 @@ directory "/etc/mysql" do
   not_if { ::File.exists?("/etc/mysql") }
 end
 
+directory "/etc/mysql/conf.d" do
+  owner "root"
+  group "root"
+  mode "0755"
+  action :create
+  not_if { ::File.exists?("/etc/mysql/conf.d") }
+end
+
 template "/etc/mysql/my.cnf" do
   source "my.cnf.erb"
   owner "root"
@@ -34,8 +42,25 @@ template "/etc/xinetd.d/mysqlchkvagrant" do
   notifies :restart, "service[xinetd]", :delayed
 end
 
-package "percona-xtradb-cluster-server-5.5" do
+case node['platform_family']
+when 'rhel'
+  cserver = "Percona-XtraDB-Cluster-server-55"
+when 'debian'
+  cserver = "percona-xtradb-cluster-server-5.5"
+else
+  raise "unsupported platform family " + node['platform_family']
+end
+
+package cserver do
   action :install
+end
+
+if platform_family?("rhel")
+  service "mysql" do
+    supports :restart => true, :reload => true
+    action [ :enable, :start ]
+    subscribes :start, "package[#{cserver}]", :immediately
+  end
 end
 
 service "xinetd" do
