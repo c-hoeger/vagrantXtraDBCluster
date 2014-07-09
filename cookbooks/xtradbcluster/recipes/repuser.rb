@@ -8,13 +8,8 @@ if node[:xtradbcluster][:cluster_ip]
   # node.override[:apt][:compile_time_update] = true
   # include_recipe "database::mysql"
 
-  if platform_family?("debian")
-    socket = "/var/lib/mysql/mysql.sock"
-  else
-    socket = "/var/run/mysqld/mysqld.sock"
-  end
   # FIXME: root password
-  mysql_connection_info = {:host => "localhost", :username => 'root', :socket => socket } #, :password => node['percona']['root_password']}
+  mysql_connection_info = {:host => "localhost", :username => 'root', :socket => "/var/run/mysqld/mysqld.sock" } #, :password => node['percona']['root_password']}
 
   # FIXME: secure data bag
   mysql_database_user repuser do

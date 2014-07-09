@@ -5,6 +5,12 @@ debmaps = { 6 => "squeeze", 7 => "wheezy" }
 if platform_family?("debian")
   include_recipe 'apt'
 
+  # haproxy
+  apt_repository 'backports' do
+    uri        'http://http.debian.net/debian'
+    components [debmaps[pversion] + '-backports', 'main' ]
+  end
+
   apt_repository 'percona' do
     uri        'http://repo.percona.com/apt'
     components [debmaps[pversion], 'main' ]

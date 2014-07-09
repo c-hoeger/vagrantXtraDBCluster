@@ -1,10 +1,5 @@
-
-if platform_family?("debian")
-  apt_repository 'backports' do
-    uri        'http://http.debian.net/debian'
-    components ['wheezy-backports', 'main' ]
-  end
-end
+include_recipe 'hostname'
+include_recipe 'xtradbcluster::repository'
 
 package "haproxy" do
   action :install
@@ -37,7 +32,3 @@ service "haproxy" do
   supports :status => true, :restart => true, :reload => true
   action [ :enable, :start ]
 end
-
-
-include_recipe 'apt'
-include_recipe 'hostname'
